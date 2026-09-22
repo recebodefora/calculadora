@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Quanto sobra por mês pra quem recebe do exterior: pessoa física, Anexo III ou Anexo V do Simples.">
+<meta property="og:title" content="Calculadora CNPJ ou PF · Recebo de Fora">
+<meta property="og:description" content="Quanto sobra por mês pra quem recebe do exterior: pessoa física, Anexo III ou Anexo V do Simples.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calculadora.recebodefora.com.br/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='15' fill='%230F4A32'/><path d='M7 16h13M15 11l5 5-5 5' stroke='%23C99A3C' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<title>Calculadora CNPJ ou PF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap">
+<style>
+  :root{
+    --verde-escuro:#0C2A20; --verde:#0F4A32; --caixa:#123527;
+    --marfim:#F6F3EA; --secundario:#D9D4C5; --dourado:#C99A3C;
+    --borda:rgba(246,243,234,.14);
+    --display:"Fraunces",Georgia,"Times New Roman",serif;
+    --corpo:"Archivo","Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--verde-escuro);color:var(--marfim);
+    font-family:var(--corpo);font-size:16px;line-height:1.55;
+    padding-inline:16px;padding-block:32px 48px;
+  }
+  .wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+
+  header{display:flex;flex-direction:column;gap:10px}
+  .marca{font-family:var(--corpo);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dourado);font-weight:600}
+  h1{font-family:var(--display);font-weight:600;font-size:clamp(28px,6vw,40px);line-height:1.1;margin:0;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--dourado)}
+  .sub{margin:0;color:var(--secundario);max-width:52ch}
+
+  .painel{background:var(--caixa);border:1px solid var(--borda);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:18px}
+  .campo{display:flex;flex-direction:column;gap:7px}
+  label,.rotulo{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--secundario);font-weight:600}
+  .linha{display:flex;gap:12px;flex-wrap:wrap}
+  .linha>.campo{flex:1 1 180px}
+  input[type=number]{
+    font-family:var(--corpo);font-size:18px;font-weight:600;color:var(--marfim);
+    background:var(--verde-escuro);border:1px solid var(--borda);border-radius:9px;
+    padding:11px 13px;width:100%;font-variant-numeric:tabular-nums;
+  }
+  input[type=number]:focus-visible,button:focus-visible,.chip:focus-visible{outline:2px solid var(--dourado);outline-offset:2px}
+  .moeda{display:flex;gap:6px}
+  .chip{
+    font-family:var(--corpo);font-size:14px;font-weight:600;color:var(--secundario);
+    background:transparent;border:1px solid var(--borda);border-radius:999px;padding:7px 15px;cursor:pointer;
+  }
+  .chip[aria-pressed=true]{background:var(--dourado);border-color:var(--dourado);color:var(--verde-escuro)}
+  .check{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+  .check input{margin-top:3px;accent-color:var(--dourado);width:17px;height:17px}
+  .check span{font-size:14px;color:var(--secundario);text-transform:none;letter-spacing:0;font-weight:400}
+  .check b{color:var(--marfim);font-weight:600}
+
+  .resultado{display:flex;flex-direction:column;gap:12px}
+  .cartao{
+    display:grid;grid-template-columns:1fr auto;gap:4px 16px;align-items:baseline;
+    background:var(--verde);border:1px solid var(--borda);border-radius:12px;padding:16px 18px;
+  }
+  .cartao.vencedor{border-color:var(--dourado);background:var(--verde);box-shadow:inset 3px 0 0 var(--dourado)}
+  .cartao h2{font-family:var(--display);font-weight:600;font-size:19px;margin:0;grid-column:1}
+  .cartao .valor{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;grid-column:2;grid-row:1/span 2;align-self:center}
+  .cartao.vencedor .valor{color:var(--dourado)}
+  .cartao .detalhe{grid-column:1;font-size:13.5px;color:var(--secundario);margin:0}
+  .selo{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--verde-escuro);background:var(--dourado);border-radius:999px;padding:2px 9px;font-weight:700;margin-left:8px;vertical-align:2px}
+
+  .veredito{background:var(--marfim);color:var(--verde-escuro);border-radius:14px;padding:22px}
+  .veredito .num{font-family:var(--display);font-weight:700;font-size:clamp(34px,9vw,52px);line-height:1;display:block;font-variant-numeric:tabular-nums}
+  .veredito p{margin:8px 0 0;font-size:15px;color:#3E4A44;max-width:48ch}
+
+  details{border-top:1px solid var(--borda);padding-top:16px}
+  summary{cursor:pointer;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--dourado);font-weight:600}
+  table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px;font-variant-numeric:tabular-nums}
+  caption{text-align:left;font-size:13px;color:var(--secundario);padding-bottom:8px}
+  th,td{text-align:right;padding:8px 6px;border-bottom:1px solid var(--borda)}
+  th:first-child,td:first-child{text-align:left}
+  thead th{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--secundario);font-weight:600}
+  .tabela-rolavel{overflow-x:auto}
+
+  .aviso{font-size:13px;color:var(--secundario);border-left:2px solid var(--dourado);padding-left:14px;margin:0}
+  .cta{background:var(--caixa);border:1px solid var(--borda);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px}
+  .cta h2{font-family:var(--display);font-size:20px;margin:0;font-weight:600}
+  .cta p{margin:0;color:var(--secundario);font-size:14.5px}
+  .cta a{
+    align-self:flex-start;background:var(--dourado);color:var(--verde-escuro);text-decoration:none;
+    font-weight:700;font-size:15px;padding:11px 20px;border-radius:999px;
+  }
+  footer{font-size:12.5px;color:var(--secundario);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header>
+    <p class="marca">Recebo de Fora</p>
+    <h1>Você recebe de fora: <em>CNPJ ou pessoa física?</em></h1>
+    <p class="sub">A conta real, em reais, do que sobra no seu bolso todo mês em cada regime. Mexe nos números e vê a diferença.</p>
+  </header>
+
+  <section class="painel" aria-label="Seus números">
+    <div class="campo">
+      <span class="rotulo">Quanto você recebe por mês</span>
+      <div class="moeda" role="group" aria-label="Moeda">
+        <button class="chip" id="chip-usd" type="button" aria-pressed="true">Em dólar</button>
+        <button class="chip" id="chip-brl" type="button" aria-pressed="false">Em real</button>
+      </div>
+    </div>
+    <div class="linha">
+      <div class="campo">
+        <label for="valor" id="rotulo-valor">Valor mensal (US$)</label>
+        <input type="number" id="valor" value="5000" min="0" step="100" inputmode="decimal">
+      </div>
+      <div class="campo" id="campo-cambio">
+        <label for="cambio">Câmbio (R$ por US$)</label>
+        <input type="number" id="cambio" value="5.40" min="0" step="0.05" inputmode="decimal">
+      </div>
+      <div class="campo">
+        <label for="contador">Contador (R$/mês)</label>
+        <input type="number" id="contador" value="400" min="0" step="50" inputmode="decimal">
+      </div>
+    </div>
+    <label class="check" for="exporta">
+      <input type="checkbox" id="exporta" checked>
+      <span><b>Meu cliente está no exterior</b> (exportação de serviço: não incidem PIS, COFINS e ISS sobre essa receita)</span>
+    </label>
+  </section>
+
+  <section class="resultado" id="resultado" aria-live="polite"></section>
+
+  <section class="veredito" id="veredito"></section>
+
+  <details>
+    <summary>Ver a conta aberta</summary>
+    <div class="tabela-rolavel">
+      <table id="detalhe">
+        <caption>Valores mensais, arredondados. Distribuição de lucro do CNPJ é isenta na pessoa física.</caption>
+        <thead><tr><th>Onde vai o dinheiro</th><th>Pessoa física</th><th>Anexo III</th><th>Anexo V</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </details>
+
+  <p class="aviso">Números aproximados, pra você entender a lógica. Tabelas do Simples Nacional, do IR e do INSS de 2025, com pró-labore de 28% da receita no Anexo III (a conta do fator R) e pró-labore de um salário mínimo no Anexo V. Não considera ISS do seu município nem deduções pessoais. Antes de decidir, valide com um contador especializado em exportação de serviços.</p>
+
+  <section class="cta">
+    <h2>Quer a conta completa?</h2>
+    <p>Toda semana, uma dúvida de quem recebe de fora resolvida sem contabilês: imposto, câmbio, CNPJ e declaração.</p>
+    <a href="https://recebodefora.beehiiv.com" target="_blank" rel="noopener">Assinar a newsletter</a>
+  </section>
+
+  <footer><span>Recebo de Fora</span><span>@recebodefora</span></footer>
+</div>
+
+<script>
+  const FAIXAS_III=[[180e3,.06,0],[360e3,.112,9360],[720e3,.135,17640],[1.8e6,.16,35640],[3.6e6,.21,125640],[4.8e6,.33,648e3]];
+  const FAIXAS_V=[[180e3,.155,0],[360e3,.18,4500],[720e3,.195,20700],[1.8e6,.205,27900],[3.6e6,.23,72900],[4.8e6,.305,342e3]];
+  const EXPORT_III=[.16+.0286+.335,.1405+.0305+.32,.1364+.0296+.325,.1364+.0296+.325,.1282+.0278+.335,.1282+.0278+.335];
+  const EXPORT_V=[.1410+.0305+.14,.1410+.0305+.17,.1492+.0323+.19,.1574+.0341+.21,.1410+.0305+.235,.1410+.0305+.235];
+  const SAL_MIN=1518, TETO_INSS=8157.41;
+
+  const brl=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0});
+  const pct=v=>(v*100).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})+'%';
+
+  function irMensal(base){
+    if(base<=2428.80) return 0;
+    if(base<=2826.65) return base*.075-182.16;
+    if(base<=3751.05) return base*.15-394.16;
+    if(base<=4664.68) return base*.225-675.49;
+    return base*.275-908.73;
+  }
+  function faixa(rbt12,tabela){
+    for(let i=0;i<tabela.length;i++) if(rbt12<=tabela[i][0]) return i;
+    return tabela.length-1;
+  }
+  function aliquotaDas(rbt12,tabela,reducao,exporta){
+    const i=faixa(rbt12,tabela), [,aliq,ded]=tabela[i];
+    let efetiva=(rbt12*aliq-ded)/rbt12;
+    if(exporta) efetiva*=(1-reducao[i]);
+    return Math.max(efetiva,0);
+  }
+  function pessoaFisica(receita){
+    const inss=Math.min(receita,TETO_INSS)*.20;
+    const ir=Math.max(0,irMensal(receita-inss));
+    return {nome:'Pessoa física',resumo:'Carnê-Leão todo mês, tabela do IR até 27,5% mais INSS de 20%',
+      itens:{'INSS (contribuinte individual)':inss,'Imposto de renda (Carnê-Leão)':ir,'Contador':0},
+      sobra:receita-inss-ir};
+  }
+  function cnpj(receita,anexo,exporta,contador){
+    const rbt12=receita*12, III=anexo==='III';
+    const das=aliquotaDas(rbt12,III?FAIXAS_III:FAIXAS_V,III?EXPORT_III:EXPORT_V,exporta)*receita;
+    const pl=III?.28*receita:SAL_MIN;
+    const inss=Math.min(pl,TETO_INSS)*.11;
+    const ir=Math.max(0,irMensal(pl-inss));
+    return {nome:III?'CNPJ no Anexo III':'CNPJ no Anexo V',
+      resumo:III?'Simples com pró-labore de 28% da receita, a conta do fator R':'Simples com pró-labore de um salário mínimo',
+      itens:{'INSS (sobre o pró-labore)':inss,'DAS do Simples':das,'IR na fonte do pró-labore':ir,'Contador':contador},
+      sobra:receita-das-inss-ir-contador};
+  }
+
+  const el=id=>document.getElementById(id);
+  let moeda='usd';
+
+  function calcular(){
+    const valor=Math.max(0,Number(el('valor').value)||0);
+    const cambio=Math.max(0,Number(el('cambio').value)||0);
+    const contador=Math.max(0,Number(el('contador').value)||0);
+    const exporta=el('exporta').checked;
+    const receita=moeda==='usd'?valor*cambio:valor;
+
+    const cenarios=[pessoaFisica(receita),cnpj(receita,'III',exporta,contador),cnpj(receita,'V',exporta,contador)];
+    const melhor=cenarios.reduce((a,b)=>b.sobra>a.sobra?b:a);
+    const pf=cenarios[0];
+
+    el('resultado').innerHTML=cenarios.map(c=>{
+      const carga=receita>0?1-c.sobra/receita:0;
+      return `<article class="cartao${c===melhor?' vencedor':''}">
+        <h2>${c.nome}${c===melhor?'<span class="selo">sobra mais</span>':''}</h2>
+        <p class="detalhe">${c.resumo} · carga de ${pct(carga)}</p>
+        <span class="valor">${brl(c.sobra)}</span>
+      </article>`;
+    }).join('');
+
+    const dif=(melhor.sobra-pf.sobra)*12;
+    el('veredito').innerHTML = melhor===pf
+      ? `<span class="num">${brl(pf.sobra)}</span>
+         <p>É o que sobra por mês como pessoa física. Nesse valor de recebimento, abrir CNPJ ainda não compensa: o DAS, o pró-labore e o contador comem a economia. Refaça a conta quando sua renda subir.</p>`
+      : `<span class="num">${brl(dif)}</span>
+         <p>É quanto você deixa de perder por ano trocando a pessoa física pelo ${melhor.nome.replace('CNPJ no ','')}, já descontado o contador. Por mês, ${brl(melhor.sobra-pf.sobra)} a mais no seu bolso.</p>`;
+
+    const chaves=[...new Set(cenarios.flatMap(c=>Object.keys(c.itens)))];
+    el('detalhe').querySelector('tbody').innerHTML=
+      `<tr><td>Entra por mês</td>${cenarios.map(()=>`<td>${brl(receita)}</td>`).join('')}</tr>`+
+      chaves.map(k=>`<tr><td>${k}</td>${cenarios.map(c=>`<td>${c.itens[k]?'− '+brl(c.itens[k]):'—'}</td>`).join('')}</tr>`).join('')+
+      `<tr><td><strong>Sobra pra você</strong></td>${cenarios.map(c=>`<td><strong>${brl(c.sobra)}</strong></td>`).join('')}</tr>`;
+  }
+
+  function setMoeda(m){
+    moeda=m;
+    el('chip-usd').setAttribute('aria-pressed',m==='usd');
+    el('chip-brl').setAttribute('aria-pressed',m==='brl');
+    el('rotulo-valor').textContent=m==='usd'?'Valor mensal (US$)':'Valor mensal (R$)';
+    el('campo-cambio').hidden=m!=='usd';
+    el('valor').value=m==='usd'?5000:27000;
+    calcular();
+  }
+
+  el('chip-usd').addEventListener('click',()=>setMoeda('usd'));
+  el('chip-brl').addEventListener('click',()=>setMoeda('brl'));
+  ['valor','cambio','contador','exporta'].forEach(id=>el(id).addEventListener('input',calcular));
+  calcular();
+</script>
+
+</body>
+</html>
