@@ -121,6 +121,15 @@
 
   <section class="veredito" id="veredito"></section>
 
+  <section class="cta" id="captura">
+    <h2>Quer essa conta no seu e-mail?</h2>
+    <p>Toda semana, uma dúvida de quem recebe de fora resolvida com a conta aberta em reais: imposto, câmbio, CNPJ e declaração. Sem contabilês.</p>
+    <form id="form-email" style="display:flex;gap:8px;flex-wrap:wrap">
+      <input type="email" id="email" required placeholder="seu@email.com" style="flex:1;min-width:200px;padding:12px 14px;border-radius:10px;border:1px solid var(--borda);background:var(--fundo);color:var(--texto);font:inherit">
+      <button type="submit" style="padding:12px 18px;border:0;border-radius:10px;background:var(--dourado);color:#0C2A20;font:inherit;font-weight:700;cursor:pointer">Quero receber</button>
+    </form>
+  </section>
+
   <details>
     <summary>Ver a conta aberta</summary>
     <div class="tabela-rolavel">
@@ -249,6 +258,12 @@
 
   el('chip-usd').addEventListener('click',()=>setMoeda('usd'));
   el('chip-brl').addEventListener('click',()=>setMoeda('brl'));
+  el('form-email').addEventListener('submit',e=>{
+    e.preventDefault();
+    const v=(el('email').value||'').trim();
+    if(!v) return;
+    location.href='https://www.recebodefora.com.br/subscribe?email='+encodeURIComponent(v);
+  });
   ['valor','cambio','contador','exporta'].forEach(id=>el(id).addEventListener('input',calcular));
   calcular();
 </script>
