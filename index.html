@@ -210,7 +210,10 @@
     const pf=cenarios[0];
 
     el('resultado').innerHTML=cenarios.map(c=>{
-      const carga=receita>0?1-c.sobra/receita:0;
+      // carga = SÓ tributos, sem o contador, pra bater com os números das edições (a edição 04 mostra 10,8%
+      // no Anexo III com exportação). O contador aparece na sobra e na tabela da conta aberta.
+      const tributos=Object.entries(c.itens).filter(([k])=>k!=='Contador').reduce((t,[,v])=>t+v,0);
+      const carga=receita>0?tributos/receita:0;
       return `<article class="cartao${c===melhor?' vencedor':''}">
         <h2>${c.nome}${c===melhor?'<span class="selo">sobra mais</span>':''}</h2>
         <p class="detalhe">${c.resumo} · carga de ${pct(carga)}</p>
@@ -228,7 +231,7 @@
     const chaves=[...new Set(cenarios.flatMap(c=>Object.keys(c.itens)))];
     el('detalhe').querySelector('tbody').innerHTML=
       `<tr><td>Entra por mês</td>${cenarios.map(()=>`<td>${brl(receita)}</td>`).join('')}</tr>`+
-      chaves.map(k=>`<tr><td>${k}</td>${cenarios.map(c=>`<td>${c.itens[k]?'− '+brl(c.itens[k]):'—'}</td>`).join('')}</tr>`).join('')+
+      chaves.map(k=>`<tr><td>${k}</td>${cenarios.map(c=>`<td>${c.itens[k]?'− '+brl(c.itens[k]):brl(0)}</td>`).join('')}</tr>`).join('')+
       `<tr><td><strong>Sobra pra você</strong></td>${cenarios.map(c=>`<td><strong>${brl(c.sobra)}</strong></td>`).join('')}</tr>`;
   }
 
