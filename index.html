@@ -1,14 +1,3 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Quanto sobra por mês pra quem recebe do exterior: pessoa física, Anexo III ou Anexo V do Simples.">
-<meta property="og:title" content="Calculadora CNPJ ou PF · Recebo de Fora">
-<meta property="og:description" content="Quanto sobra por mês pra quem recebe do exterior: pessoa física, Anexo III ou Anexo V do Simples.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://calculadora.recebodefora.com.br/">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='15' fill='%230F4A32'/><path d='M7 16h13M15 11l5 5-5 5' stroke='%23C99A3C' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 <title>Calculadora CNPJ ou PF</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -92,9 +81,6 @@
   }
   footer{font-size:12.5px;color:var(--secundario);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 </style>
-</head>
-<body>
-
 
 <div class="wrap">
   <header>
@@ -149,9 +135,15 @@
   <p class="aviso">Números aproximados, pra você entender a lógica. Tabelas do Simples Nacional, do IR e do INSS de 2025, com pró-labore de 28% da receita no Anexo III (a conta do fator R) e pró-labore de um salário mínimo no Anexo V. Não considera ISS do seu município nem deduções pessoais. Antes de decidir, valide com um contador especializado em exportação de serviços.</p>
 
   <section class="cta">
+    <h2>Quer fazer essa conta com um contador?</h2>
+    <p>A Avante é o escritório contábil parceiro do Recebo de Fora e atende quem presta serviço pro exterior. Com o código <strong>RECEBODEFORA10</strong> você tem 10% de desconto na primeira mensalidade.</p>
+    <a href="https://wa.me/5521972360836?text=Oi%21%20Vim%20pelo%20Recebo%20de%20Fora%2C%20c%C3%B3digo%20RECEBODEFORA10.%20Recebo%20do%20exterior%20e%20queria%20entender%20a%20parte%20cont%C3%A1bil." target="_blank" rel="noopener">Falar com a Avante no WhatsApp</a>
+  </section>
+
+  <section class="cta">
     <h2>Quer a conta completa?</h2>
     <p>Toda semana, uma dúvida de quem recebe de fora resolvida sem contabilês: imposto, câmbio, CNPJ e declaração.</p>
-    <a href="https://recebodefora.beehiiv.com" target="_blank" rel="noopener">Assinar a newsletter</a>
+    <a href="https://www.recebodefora.com.br" target="_blank" rel="noopener">Assinar a newsletter</a>
   </section>
 
   <footer><span>Recebo de Fora</span><span>@recebodefora</span></footer>
@@ -255,6 +247,3 @@
   ['valor','cambio','contador','exporta'].forEach(id=>el(id).addEventListener('input',calcular));
   calcular();
 </script>
-
-</body>
-</html>
