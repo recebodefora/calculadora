@@ -141,7 +141,7 @@
     </div>
   </details>
 
-  <p class="aviso">Números aproximados, pra você entender a lógica. Tabelas do Simples Nacional, do IR e do INSS de 2025, com pró-labore de 28% da receita no Anexo III (a conta do fator R) e pró-labore de um salário mínimo no Anexo V. Não considera ISS do seu município nem deduções pessoais. Antes de decidir, valide com um contador especializado em exportação de serviços.</p>
+  <p class="aviso">Números aproximados, pra você entender a lógica. Tabelas do Simples Nacional e do INSS de 2025, e IR de 2026 já com o redutor da Lei 15.270/2025 (isenção até R$ 5 mil por mês, com redução gradual até R$ 7.350), com pró-labore de 28% da receita no Anexo III (a conta do fator R) e pró-labore de um salário mínimo no Anexo V. Não considera ISS do seu município nem deduções pessoais. Antes de decidir, valide com um contador especializado em exportação de serviços.</p>
 
   <section class="cta">
     <h2>Quer fazer essa conta com um contador?</h2>
@@ -170,12 +170,22 @@
   const brl=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0});
   const pct=v=>(v*100).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})+'%';
 
-  function irMensal(base){
+  function irTabela(base){
     if(base<=2428.80) return 0;
     if(base<=2826.65) return base*.075-182.16;
     if(base<=3751.05) return base*.15-394.16;
     if(base<=4664.68) return base*.225-675.49;
     return base*.275-908.73;
+  }
+  // Lei 15.270/2025, em vigor desde 01/01/2026: redutor mensal sobre o imposto já apurado.
+  // Redução = 978,62 - 0,133145 x rendimento BRUTO, limitada ao próprio imposto, e só até R$ 7.350.
+  // Desenhada pra zerar exatamente em R$ 5.000 de rendimento. Acima de R$ 7.350 não há redução.
+  function irMensal(base, bruto){
+    const imposto = Math.max(0, irTabela(base));
+    const rend = (bruto === undefined ? base : bruto);
+    if(rend > 7350) return imposto;
+    const reducao = Math.min(Math.max(0, 978.62 - 0.133145*rend), imposto);
+    return Math.max(0, imposto - reducao);
   }
   function faixa(rbt12,tabela){
     for(let i=0;i<tabela.length;i++) if(rbt12<=tabela[i][0]) return i;
@@ -189,7 +199,7 @@
   }
   function pessoaFisica(receita){
     const inss=Math.min(receita,TETO_INSS)*.20;
-    const ir=Math.max(0,irMensal(receita-inss));
+    const ir=Math.max(0,irMensal(receita-inss, receita));
     return {nome:'Pessoa física',resumo:'Carnê-Leão todo mês, tabela do IR até 27,5% mais INSS de 20%',
       itens:{'INSS (contribuinte individual)':inss,'Imposto de renda (Carnê-Leão)':ir,'Contador':0},
       sobra:receita-inss-ir};
@@ -199,7 +209,7 @@
     const das=aliquotaDas(rbt12,III?FAIXAS_III:FAIXAS_V,III?EXPORT_III:EXPORT_V,exporta)*receita;
     const pl=III?.28*receita:SAL_MIN;
     const inss=Math.min(pl,TETO_INSS)*.11;
-    const ir=Math.max(0,irMensal(pl-inss));
+    const ir=Math.max(0,irMensal(pl-inss, pl));
     return {nome:III?'CNPJ no Anexo III':'CNPJ no Anexo V',
       resumo:III?'Simples com pró-labore de 28% da receita, a conta do fator R':'Simples com pró-labore de um salário mínimo',
       itens:{'INSS (sobre o pró-labore)':inss,'DAS do Simples':das,'IR na fonte do pró-labore':ir,'Contador':contador},
